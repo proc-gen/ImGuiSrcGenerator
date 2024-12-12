@@ -15,7 +15,7 @@ namespace ImGuiSrcGenerator
 
         public static ImGuiRenderer GuiRenderer;
 
-        Main Main = new Main();
+        IDisplay Main = new Button();
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -49,7 +49,7 @@ namespace ImGuiSrcGenerator
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(new Color(Main.ColorV4));
+            GraphicsDevice.Clear(Color.Black);
 
             _spriteBatch.Begin();
             _spriteBatch.End();
