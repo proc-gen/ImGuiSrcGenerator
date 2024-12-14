@@ -17,23 +17,19 @@ namespace ImGuiSrcGenerator.Generators
             Generator = generator;
         }
 
-        public virtual StringBuilder ConvertNodeForRenderPreChildren(StringBuilder rb, XmlNode xmlNode, ref string prefix)
+        public virtual void ConvertNodeForRenderPreChildren(StringBuilder rb, XmlNode xmlNode, ref string prefix)
         {
-            return rb;
         }
 
-        public virtual StringBuilder ConvertNodeForRenderPostChildren(StringBuilder rb, XmlNode xmlNode, ref string prefix)
+        public virtual void ConvertNodeForRenderPostChildren(StringBuilder rb, XmlNode xmlNode, ref string prefix)
         {
-            return rb;
         }
 
-        public virtual StringBuilder ConvertNodeForActionPreChildren(StringBuilder ab, XmlNode xmlNode, ref string prefix)
+        public virtual void ConvertNodeForActionPreChildren(StringBuilder ab, XmlNode xmlNode, ref string prefix)
         {
-            return ab;
         }
-        public virtual StringBuilder ConvertNodeForActionPostChildren(StringBuilder ab, XmlNode xmlNode, ref string prefix)
+        public virtual void ConvertNodeForActionPostChildren(StringBuilder ab, XmlNode xmlNode, ref string prefix)
         {
-            return ab;
         }
     }
 }
