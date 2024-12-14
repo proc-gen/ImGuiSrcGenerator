@@ -1,4 +1,5 @@
 ﻿using ImGuiSrcGenerator.Constants;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,9 +31,6 @@ namespace ImGuiSrcGenerator.Generators
                 case ConvertMode.Action:
                     converter.ConvertNodeForActionPreChildren(sb, xmlNode, ref prefix);
                     break;
-                case ConvertMode.Property:
-                    converter.ConvertNodeForProperties(sb, xmlNode, ref prefix);
-                    break;
             }
 
             if (xmlNode.HasChildNodes)
@@ -56,6 +54,19 @@ namespace ImGuiSrcGenerator.Generators
             }
         }
 
+        public virtual void ConvertNodeProperties(HashSet<string> properties, XmlNode xmlNode)
+        {
+            ConvertNodeForProperties(properties, xmlNode);
+            if (xmlNode.HasChildNodes)
+            {
+                foreach (XmlNode childNode in xmlNode.ChildNodes)
+                {
+                    var childConverter = Generator.GetConverterByComponentName(childNode.Name);
+                    childConverter.ConvertNodeProperties(properties, childNode);
+                }
+            }
+        }
+
         public virtual void ConvertNodeForRenderPreChildren(StringBuilder rb, XmlNode xmlNode, ref string prefix)
         {
         }
@@ -71,7 +82,7 @@ namespace ImGuiSrcGenerator.Generators
         {
         }
 
-        public virtual void ConvertNodeForProperties(StringBuilder pb, XmlNode xmlNode, ref string prefix)
+        public virtual void ConvertNodeForProperties(HashSet<string> properties, XmlNode xmlNode)
         {
         }
     }

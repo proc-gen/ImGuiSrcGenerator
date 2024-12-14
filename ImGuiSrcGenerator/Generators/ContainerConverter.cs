@@ -23,7 +23,12 @@ namespace ImGuiSrcGenerator.Generators
             else
             {
                 ConvertNodeForActionPreChildren(sb, xmlNode, ref prefix);
-                base.ConvertNode(ConvertMode.Property, sb, xmlNode, ref prefix);
+                HashSet<string> properties = new HashSet<string>();
+                base.ConvertNodeProperties(properties, xmlNode);
+                foreach (string property in properties)
+                {
+                    sb.AppendLine(string.Format("{0}{1}", prefix, property));
+                }
                 sb.AppendLine();
                 if (xmlNode.HasChildNodes)
                 {

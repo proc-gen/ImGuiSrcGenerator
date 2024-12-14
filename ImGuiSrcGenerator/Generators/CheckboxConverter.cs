@@ -15,9 +15,9 @@ namespace ImGuiSrcGenerator.Generators
             rb.AppendLine(string.Format("{0}ImGui.Checkbox(\"{1}\", ref {2}_Checked));", prefix, xmlNode.Attributes["text"].Value, xmlNode.Attributes["name"].Value));
         }
 
-        public override void ConvertNodeForProperties(StringBuilder rb, XmlNode xmlNode, ref string prefix)
+        public override void ConvertNodeForProperties(HashSet<string> properties, XmlNode xmlNode)
         {
-            rb.AppendLine(string.Format("{0}public bool {1}_Checked;", prefix, xmlNode.Attributes["name"].Value));
+            properties.Add(string.Format("public bool {0}_Checked;", xmlNode.Attributes["name"].Value));
         }
     }
 }
