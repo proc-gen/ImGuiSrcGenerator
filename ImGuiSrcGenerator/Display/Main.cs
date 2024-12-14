@@ -25,9 +25,9 @@ namespace ImGuiSrcGenerator.Display
                 ImGui.TextColored(new Vector4(1, 1, 0, 1).ToNumerics(), "Important Stuff");
                 ImGui.BeginGroup();
                 ImGui.BeginChild("Scrolling", new System.Numerics.Vector2(0), ImGuiChildFlags.Border);
-                ImGui.InputTextMultiline("XML", ref XmlCode, int.MaxValue, Vector2.Zero.ToNumerics());
+                ImGui.InputTextMultiline("XML", ref XmlCode, int.MaxValue, new Vector2(600, 600).ToNumerics());
                 ImGui.SameLine();
-                ImGui.InputTextMultiline("Converted", ref ConvertedCode, int.MaxValue, Vector2.Zero.ToNumerics());
+                ImGui.InputTextMultiline("Converted", ref ConvertedCode, int.MaxValue, new Vector2(600, 600).ToNumerics());
                 ImGui.EndChild();
                 ImGui.EndGroup();
                 ImGui.End();
