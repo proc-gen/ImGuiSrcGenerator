@@ -18,9 +18,10 @@ namespace ImGuiSrcGenerator
 
         Main Main = new Main();
 
-        string toConvert = 
-@"<Container className=""Button"" >
+        string toConvert =
+@"<Container className=""TestContainer"" >
 <Button name=""MyFirstButton"" text=""Click Me!"" />
+<Checkbox name=""MyFirstCheckbox"" text=""Check Me!"" />
 </Container>
 ";
 

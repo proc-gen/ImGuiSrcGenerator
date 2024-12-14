@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImGuiSrcGenerator.Constants;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,29 @@ namespace ImGuiSrcGenerator.Generators
         {
         }
 
+        public override void ConvertNode(ConvertMode mode, StringBuilder sb, XmlNode xmlNode, ref string prefix)
+        {
+            if (mode == ConvertMode.Render)
+            {
+                base.ConvertNode(mode, sb, xmlNode, ref prefix);
+            }
+            else
+            {
+                ConvertNodeForActionPreChildren(sb, xmlNode, ref prefix);
+                base.ConvertNode(ConvertMode.Property, sb, xmlNode, ref prefix);
+                sb.AppendLine();
+                if (xmlNode.HasChildNodes)
+                {
+                    foreach (XmlNode childNode in xmlNode.ChildNodes)
+                    {
+                        var childConverter = Generator.GetConverterByComponentName(childNode.Name);
+                        childConverter.ConvertNode(mode, sb, childNode, ref prefix);
+                    }
+                }
+
+                ConvertNodeForActionPostChildren(sb, xmlNode, ref prefix);
+            }
+        }
         public override void ConvertNodeForRenderPreChildren(StringBuilder rb, XmlNode xmlNode, ref string prefix)
         {
             rb.AppendLine(string.Format("public partial class {0}", xmlNode.Attributes["className"].Value));

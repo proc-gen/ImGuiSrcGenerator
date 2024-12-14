@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace ImGuiSrcGenerator.Generators
 {
@@ -20,16 +21,26 @@ namespace ImGuiSrcGenerator.Generators
             xmlDoc.LoadXml(input);
             SetConfiguration(xmlDoc.FirstChild);
             StringBuilder sb = new StringBuilder();
-            ConvertNode(ConvertMode.Render, sb, xmlDoc.FirstChild);
+            ConvertDocument(ConvertMode.Render, sb, xmlDoc.FirstChild);
             sb.AppendLine();
             sb.AppendLine();
-            ConvertNode(ConvertMode.Action, sb, xmlDoc.FirstChild);
+            ConvertDocument(ConvertMode.Action, sb, xmlDoc.FirstChild);
             return sb.ToString();
         }
 
         public string ConvertFromFile(string filename)
         {
             return "";
+        }
+
+        public Converter GetConverterByComponentName(string name)
+        {
+            if (!Converters.ContainsKey(name))
+            {
+                Converters[name] = (Converter)Activator.CreateInstance(Type.GetType(string.Format("ImGuiSrcGenerator.Generators.{0}Converter, ImGuiSrcGenerator", name)), [this]);
+            }
+
+            return Converters[name];
         }
 
         private void SetConfiguration(XmlNode xmlNode)
@@ -40,42 +51,11 @@ namespace ImGuiSrcGenerator.Generators
             }
         }
 
-        private StringBuilder ConvertNode(ConvertMode mode, StringBuilder sb, XmlNode xmlNode, string prefix = "")
+        private void ConvertDocument(ConvertMode mode, StringBuilder sb, XmlNode xmlNode, string prefix = "")
         {
-            if (!Converters.ContainsKey(xmlNode.Name)) 
-            {
-                Converters[xmlNode.Name] = (Converter)Activator.CreateInstance(Type.GetType(string.Format("ImGuiSrcGenerator.Generators.{0}Converter, ImGuiSrcGenerator", xmlNode.Name)), [this]);
-            }
+            var converter = GetConverterByComponentName(xmlNode.Name);
 
-            switch (mode)
-            {
-                case ConvertMode.Render:
-                    Converters[xmlNode.Name].ConvertNodeForRenderPreChildren(sb, xmlNode, ref prefix);
-                    break;
-                case ConvertMode.Action:
-                    Converters[xmlNode.Name].ConvertNodeForActionPreChildren(sb, xmlNode, ref prefix);
-                    break;
-            }
-
-            if (xmlNode.HasChildNodes)
-            {
-                foreach (XmlNode childNode in xmlNode.ChildNodes)
-                {
-                    ConvertNode(mode, sb, childNode, prefix + PrefixCharacter);
-                }
-            }
-
-            switch (mode)
-            {
-                case ConvertMode.Render:
-                    Converters[xmlNode.Name].ConvertNodeForRenderPostChildren(sb, xmlNode, ref prefix);
-                    break;
-                case ConvertMode.Action:
-                    Converters[xmlNode.Name].ConvertNodeForActionPostChildren(sb, xmlNode, ref prefix);
-                    break;
-            }
-
-            return sb;
+            converter.ConvertNode(mode, sb, xmlNode, ref prefix);
         }
     }
 }

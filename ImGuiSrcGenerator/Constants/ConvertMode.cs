@@ -10,5 +10,6 @@ namespace ImGuiSrcGenerator.Constants
     {
         Render,
         Action,
+        Property,
     }
 }

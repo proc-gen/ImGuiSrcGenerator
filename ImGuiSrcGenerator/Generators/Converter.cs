@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImGuiSrcGenerator.Constants;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,44 @@ namespace ImGuiSrcGenerator.Generators
             Generator = generator;
         }
 
+        public virtual void ConvertNode(ConvertMode mode, StringBuilder sb, XmlNode xmlNode, ref string prefix)
+        {
+            var converter = Generator.GetConverterByComponentName(xmlNode.Name);
+
+            switch (mode)
+            {
+                case ConvertMode.Render:
+                    converter.ConvertNodeForRenderPreChildren(sb, xmlNode, ref prefix);
+                    break;
+                case ConvertMode.Action:
+                    converter.ConvertNodeForActionPreChildren(sb, xmlNode, ref prefix);
+                    break;
+                case ConvertMode.Property:
+                    converter.ConvertNodeForProperties(sb, xmlNode, ref prefix);
+                    break;
+            }
+
+            if (xmlNode.HasChildNodes)
+            {
+                foreach (XmlNode childNode in xmlNode.ChildNodes)
+                {
+                    var childConverter = Generator.GetConverterByComponentName(childNode.Name);
+                    string newPrefix = mode != ConvertMode.Property ? prefix + PrefixCharacter : prefix;
+                    childConverter.ConvertNode(mode, sb, childNode, ref newPrefix);
+                }
+            }
+
+            switch (mode)
+            {
+                case ConvertMode.Render:
+                    converter.ConvertNodeForRenderPostChildren(sb, xmlNode, ref prefix);
+                    break;
+                case ConvertMode.Action:
+                    converter.ConvertNodeForActionPostChildren(sb, xmlNode, ref prefix);
+                    break;
+            }
+        }
+
         public virtual void ConvertNodeForRenderPreChildren(StringBuilder rb, XmlNode xmlNode, ref string prefix)
         {
         }
@@ -29,6 +68,10 @@ namespace ImGuiSrcGenerator.Generators
         {
         }
         public virtual void ConvertNodeForActionPostChildren(StringBuilder ab, XmlNode xmlNode, ref string prefix)
+        {
+        }
+
+        public virtual void ConvertNodeForProperties(StringBuilder pb, XmlNode xmlNode, ref string prefix)
         {
         }
     }
