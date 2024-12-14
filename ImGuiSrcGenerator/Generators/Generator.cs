@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImGuiSrcGenerator.Constants;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,17 +11,19 @@ namespace ImGuiSrcGenerator.Generators
 {
     internal class Generator
     {
-        string PrefixCharacter = "\t";
+        public string PrefixCharacter { get; private set; } = "\t";
+        Dictionary<string, Converter> Converters = new Dictionary<string, Converter>();
+
         public string ConvertFromString(string input)
         {
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(input);
             SetConfiguration(xmlDoc.FirstChild);
             StringBuilder sb = new StringBuilder();
-            ConvertNodeForRender(sb, xmlDoc.FirstChild);
+            ConvertNode(ConvertMode.Render, sb, xmlDoc.FirstChild);
             sb.AppendLine();
             sb.AppendLine();
-            ConvertNodeForAction(sb, xmlDoc.FirstChild);
+            ConvertNode(ConvertMode.Action, sb, xmlDoc.FirstChild);
             return sb.ToString();
         }
 
@@ -37,22 +40,20 @@ namespace ImGuiSrcGenerator.Generators
             }
         }
 
-        private StringBuilder ConvertNodeForRender(StringBuilder renderBuilder, XmlNode xmlNode, string prefix = "")
+        private StringBuilder ConvertNode(ConvertMode mode, StringBuilder sb, XmlNode xmlNode, string prefix = "")
         {
-            switch (xmlNode.Name)
+            if (!Converters.ContainsKey(xmlNode.Name)) 
             {
-                case "Button":
-                    renderBuilder.AppendLine(string.Format("{0}if (ImGui.Button(\"{1}\"))", prefix, xmlNode.Attributes["text"].Value));
-                    renderBuilder.AppendLine(string.Format("{0}{{", prefix));
-                    renderBuilder.AppendLine(string.Format("{0}{1}_OnClick();", prefix + PrefixCharacter, xmlNode.Attributes["name"].Value));
-                    renderBuilder.AppendLine(string.Format("{0}}}", prefix));
+                Converters[xmlNode.Name] = (Converter)Activator.CreateInstance(Type.GetType(string.Format("ImGuiSrcGenerator.Generators.{0}Converter, ImGuiSrcGenerator", xmlNode.Name)), [this]);
+            }
+
+            switch (mode)
+            {
+                case ConvertMode.Render:
+                    Converters[xmlNode.Name].ConvertNodeForRenderPreChildren(sb, xmlNode, ref prefix);
                     break;
-                case "Container":
-                    renderBuilder.AppendLine(string.Format("public partial class {0}", xmlNode.Attributes["className"].Value));
-                    renderBuilder.AppendLine("{");
-                    prefix += PrefixCharacter;
-                    renderBuilder.AppendLine(string.Format("{0}public void Render()", prefix));
-                    renderBuilder.AppendLine(string.Format("{0}{{", prefix));
+                case ConvertMode.Action:
+                    Converters[xmlNode.Name].ConvertNodeForActionPreChildren(sb, xmlNode, ref prefix);
                     break;
             }
 
@@ -60,53 +61,21 @@ namespace ImGuiSrcGenerator.Generators
             {
                 foreach (XmlNode childNode in xmlNode.ChildNodes)
                 {
-                    ConvertNodeForRender(renderBuilder, childNode, prefix + PrefixCharacter);
+                    ConvertNode(mode, sb, childNode, prefix + PrefixCharacter);
                 }
             }
 
-            switch (xmlNode.Name)
+            switch (mode)
             {
-                case "Container":
-                    renderBuilder.AppendLine(string.Format("{0}}}", prefix));
-                    renderBuilder.AppendLine("}");
+                case ConvertMode.Render:
+                    Converters[xmlNode.Name].ConvertNodeForRenderPostChildren(sb, xmlNode, ref prefix);
                     break;
-            }
-            return renderBuilder;
-        }
-
-        private StringBuilder ConvertNodeForAction(StringBuilder actionBuilder, XmlNode xmlNode, string prefix = "")
-        {
-            switch (xmlNode.Name)
-            {
-                case "Button":
-                    actionBuilder.AppendLine(string.Format("{0}public void {1}_OnClick()", prefix, xmlNode.Attributes["name"].Value));
-                    actionBuilder.AppendLine(string.Format("{0}{{", prefix));
-                    actionBuilder.AppendLine();
-                    actionBuilder.AppendLine(string.Format("{0}}}", prefix));
-                    break;
-                case "Container":
-                    actionBuilder.AppendLine(string.Format("public partial class {0}", xmlNode.Attributes["className"].Value));
-                    actionBuilder.AppendLine("{");
-                    prefix += PrefixCharacter;
+                case ConvertMode.Action:
+                    Converters[xmlNode.Name].ConvertNodeForActionPostChildren(sb, xmlNode, ref prefix);
                     break;
             }
 
-            if (xmlNode.HasChildNodes)
-            {
-                foreach (XmlNode childNode in xmlNode.ChildNodes)
-                {
-                    ConvertNodeForAction(actionBuilder, childNode, prefix + PrefixCharacter);
-                }
-            }
-
-            switch (xmlNode.Name)
-            {
-                case "Container":
-                    actionBuilder.AppendLine("}");
-                    break;
-            }
-
-            return actionBuilder;
+            return sb;
         }
     }
 }
