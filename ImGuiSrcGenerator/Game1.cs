@@ -5,6 +5,7 @@ using System;
 using MonoGame.ImGuiNet;
 using ImGuiNET;
 using ImGuiSrcGenerator.Display;
+using ImGuiSrcGenerator.Generators;
 
 namespace ImGuiSrcGenerator
 {
@@ -15,7 +16,14 @@ namespace ImGuiSrcGenerator
 
         public static ImGuiRenderer GuiRenderer;
 
-        IDisplay Main = new Button();
+        Main Main = new Main();
+
+        string toConvert = 
+@"<Container className=""Button"" >
+<Button name=""MyFirstButton"" text=""Click Me!"" />
+</Container>
+";
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -28,7 +36,8 @@ namespace ImGuiSrcGenerator
         protected override void Initialize()
         {
             GuiRenderer = new ImGuiRenderer(this);
-
+            Main.XmlCode = toConvert;
+            Main.ConvertedCode = Generator.ConvertFromString(toConvert);
             base.Initialize();
         }
 

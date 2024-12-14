@@ -1,20 +1,14 @@
 ﻿using ImGuiNET;
+using System;
 using System.Threading.Tasks;
 
 namespace ImGuiSrcGenerator.Display
 {
     internal partial class Button : IDisplay
     {
-        bool clicked = false;
-        bool wasClicked = false;
         public void Render()
         {
-            clicked = ImGui.Button("Click Me");
-            if (clicked)
-            {
-                wasClicked = true;
-            }
-            if (wasClicked)
+            if (ImGui.Button("Click Me"))
             {
                 OnClick_Button();
             }
