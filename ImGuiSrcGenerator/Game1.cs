@@ -22,6 +22,10 @@ namespace ImGuiSrcGenerator
 @"<Container className=""TestContainer"" >
 <Button name=""MyFirstButton"" text=""Click Me!"" />
 <Checkbox name=""MyFirstCheckbox"" text=""Check Me!"" />
+<RadioButton name=""RadioGroup"" text=""Radio 1"" value=""0""/>
+<RadioButton name=""RadioGroup"" text=""Radio 2"" value=""1""/>
+<RadioButton name=""RadioGroup"" text=""Radio 3"" value=""2""/>
+<RadioButton name=""RadioGroup"" text=""Radio 4"" value=""3""/>
 </Container>
 ";
 
