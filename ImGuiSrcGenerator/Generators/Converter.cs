@@ -9,7 +9,7 @@ using System.Xml;
 
 namespace ImGuiSrcGenerator.Generators
 {
-    internal abstract class Converter
+    public abstract class Converter
     {
         protected Generator Generator;
         protected string PrefixCharacter { get { return Generator.PrefixCharacter; } }

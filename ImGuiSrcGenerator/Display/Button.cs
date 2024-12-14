@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ImGuiSrcGenerator.Display
 {
-    internal partial class Button : IDisplay
+    public partial class Button : IDisplay
     {
         public void Render()
         {
@@ -20,7 +20,7 @@ namespace ImGuiSrcGenerator.Display
         }
     }
 
-    internal partial class Button
+    public partial class Button
     {
         public bool CheckboxChecked;
         public int RadioValue;

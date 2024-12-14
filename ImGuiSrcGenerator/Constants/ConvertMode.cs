@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ImGuiSrcGenerator.Constants
 {
-    internal enum ConvertMode
+    public enum ConvertMode
     {
         Render,
         Action,

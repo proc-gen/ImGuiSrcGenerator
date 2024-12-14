@@ -10,7 +10,7 @@ using System.Xml.Linq;
 
 namespace ImGuiSrcGenerator.Generators
 {
-    internal class Generator
+    public class Generator
     {
         public string PrefixCharacter { get; private set; } = "\t";
         Dictionary<string, Converter> Converters = new Dictionary<string, Converter>();

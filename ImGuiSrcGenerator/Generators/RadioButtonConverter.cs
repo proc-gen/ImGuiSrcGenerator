@@ -7,7 +7,7 @@ using System.Xml;
 
 namespace ImGuiSrcGenerator.Generators
 {
-    internal class RadioButtonConverter : Converter
+    public class RadioButtonConverter : Converter
     {
         public RadioButtonConverter(Generator generator) : base(generator) { }
 

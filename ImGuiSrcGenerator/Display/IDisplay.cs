@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ImGuiSrcGenerator.Display
 {
-    internal interface IDisplay
+    public interface IDisplay
     {
         void Render();
     }

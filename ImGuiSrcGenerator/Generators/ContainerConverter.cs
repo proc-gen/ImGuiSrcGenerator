@@ -8,7 +8,7 @@ using System.Xml;
 
 namespace ImGuiSrcGenerator.Generators
 {
-    internal class ContainerConverter : Converter
+    public class ContainerConverter : Converter
     {
         public ContainerConverter(Generator generator) : base(generator)
         {

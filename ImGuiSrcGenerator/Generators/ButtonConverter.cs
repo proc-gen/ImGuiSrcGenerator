@@ -7,7 +7,7 @@ using System.Xml;
 
 namespace ImGuiSrcGenerator.Generators
 {
-    internal class ButtonConverter : Converter
+    public class ButtonConverter : Converter
     {
         public ButtonConverter(Generator generator) : base(generator) { }
 

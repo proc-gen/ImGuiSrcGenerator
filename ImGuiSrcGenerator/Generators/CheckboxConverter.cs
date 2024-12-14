@@ -7,7 +7,7 @@ using System.Xml;
 
 namespace ImGuiSrcGenerator.Generators
 {
-    internal class CheckboxConverter : Converter
+    public class CheckboxConverter : Converter
     {
         public CheckboxConverter(Generator generator) : base(generator) { }
         public override void ConvertNodeForRenderPreChildren(StringBuilder rb, XmlNode xmlNode, ref string prefix)
