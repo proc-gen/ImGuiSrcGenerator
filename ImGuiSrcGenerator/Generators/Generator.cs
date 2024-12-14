@@ -10,11 +10,12 @@ namespace ImGuiSrcGenerator.Generators
 {
     internal class Generator
     {
-        public static string ConvertFromString(string input)
+        string PrefixCharacter = "\t";
+        public string ConvertFromString(string input)
         {
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(input);
-
+            SetConfiguration(xmlDoc.FirstChild);
             StringBuilder sb = new StringBuilder();
             ConvertNodeForRender(sb, xmlDoc.FirstChild);
             sb.AppendLine();
@@ -23,26 +24,35 @@ namespace ImGuiSrcGenerator.Generators
             return sb.ToString();
         }
 
-        public static string ConvertFromFile(string filename)
+        public string ConvertFromFile(string filename)
         {
             return "";
         }
 
-        private static StringBuilder ConvertNodeForRender(StringBuilder renderBuilder, XmlNode xmlNode)
+        private void SetConfiguration(XmlNode xmlNode)
+        {
+            if (xmlNode.Attributes.GetNamedItem("prefixCharacter") != null)
+            {
+                PrefixCharacter = xmlNode.Attributes["prefixCharacter"].Value;
+            }
+        }
+
+        private StringBuilder ConvertNodeForRender(StringBuilder renderBuilder, XmlNode xmlNode, string prefix = "")
         {
             switch (xmlNode.Name)
             {
                 case "Button":
-                    renderBuilder.AppendLine(string.Format("if (ImGui.Button(\"{0}\"))", xmlNode.Attributes["text"].Value));
-                    renderBuilder.AppendLine("{");
-                    renderBuilder.AppendLine(string.Format("{0}_OnClick();", xmlNode.Attributes["name"].Value));
-                    renderBuilder.AppendLine("}");
+                    renderBuilder.AppendLine(string.Format("{0}if (ImGui.Button(\"{1}\"))", prefix, xmlNode.Attributes["text"].Value));
+                    renderBuilder.AppendLine(string.Format("{0}{{", prefix));
+                    renderBuilder.AppendLine(string.Format("{0}{1}_OnClick();", prefix + PrefixCharacter, xmlNode.Attributes["name"].Value));
+                    renderBuilder.AppendLine(string.Format("{0}}}", prefix));
                     break;
                 case "Container":
-                    renderBuilder.AppendLine(string.Format("internal partial class {0}", xmlNode.Attributes["className"].Value));
+                    renderBuilder.AppendLine(string.Format("public partial class {0}", xmlNode.Attributes["className"].Value));
                     renderBuilder.AppendLine("{");
-                    renderBuilder.AppendLine("public void Render()");
-                    renderBuilder.AppendLine("{");
+                    prefix += PrefixCharacter;
+                    renderBuilder.AppendLine(string.Format("{0}public void Render()", prefix));
+                    renderBuilder.AppendLine(string.Format("{0}{{", prefix));
                     break;
             }
 
@@ -50,33 +60,34 @@ namespace ImGuiSrcGenerator.Generators
             {
                 foreach (XmlNode childNode in xmlNode.ChildNodes)
                 {
-                    ConvertNodeForRender(renderBuilder, childNode);
+                    ConvertNodeForRender(renderBuilder, childNode, prefix + PrefixCharacter);
                 }
             }
 
             switch (xmlNode.Name)
             {
                 case "Container":
-                    renderBuilder.AppendLine("}");
+                    renderBuilder.AppendLine(string.Format("{0}}}", prefix));
                     renderBuilder.AppendLine("}");
                     break;
             }
             return renderBuilder;
         }
 
-        private static StringBuilder ConvertNodeForAction(StringBuilder actionBuilder, XmlNode xmlNode)
+        private StringBuilder ConvertNodeForAction(StringBuilder actionBuilder, XmlNode xmlNode, string prefix = "")
         {
             switch (xmlNode.Name)
             {
                 case "Button":
-                    actionBuilder.AppendLine(string.Format("public void {0}_OnClick()", xmlNode.Attributes["name"].Value));
-                    actionBuilder.AppendLine("{");
+                    actionBuilder.AppendLine(string.Format("{0}public void {1}_OnClick()", prefix, xmlNode.Attributes["name"].Value));
+                    actionBuilder.AppendLine(string.Format("{0}{{", prefix));
                     actionBuilder.AppendLine();
-                    actionBuilder.AppendLine("}");
+                    actionBuilder.AppendLine(string.Format("{0}}}", prefix));
                     break;
                 case "Container":
-                    actionBuilder.AppendLine(string.Format("internal partial class {0}", xmlNode.Attributes["className"].Value));
+                    actionBuilder.AppendLine(string.Format("public partial class {0}", xmlNode.Attributes["className"].Value));
                     actionBuilder.AppendLine("{");
+                    prefix += PrefixCharacter;
                     break;
             }
 
@@ -84,7 +95,7 @@ namespace ImGuiSrcGenerator.Generators
             {
                 foreach (XmlNode childNode in xmlNode.ChildNodes)
                 {
-                    ConvertNodeForAction(actionBuilder, childNode);
+                    ConvertNodeForAction(actionBuilder, childNode, prefix + PrefixCharacter);
                 }
             }
 

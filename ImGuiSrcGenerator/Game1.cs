@@ -37,7 +37,8 @@ namespace ImGuiSrcGenerator
         {
             GuiRenderer = new ImGuiRenderer(this);
             Main.XmlCode = toConvert;
-            Main.ConvertedCode = Generator.ConvertFromString(toConvert);
+            var generator = new Generator();
+            Main.ConvertedCode = generator.ConvertFromString(toConvert);
             base.Initialize();
         }
 
