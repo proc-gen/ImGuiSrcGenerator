@@ -18,7 +18,7 @@ namespace ImGuiSrcGenerator.Generators
 
         public override void ConvertNodeForProperties(HashSet<string> properties, XmlNode xmlNode)
         {
-            properties.Add(string.Format("public bool {0}_Value;", xmlNode.Attributes["name"].Value));
+            properties.Add(string.Format("public int {0}_Value;", xmlNode.Attributes["name"].Value));
         }
     }
 }
