@@ -15,15 +15,19 @@ namespace ImGuiSrcGenerator.Generators
         {
             var name = GetName(xmlNode);
             var codeName = GetCodeUsableName(xmlNode);
-            uint maxLength = 0;
-            if (xmlNode.Attributes.GetNamedItem("maxLength") != null)
-            {
-                maxLength = uint.Parse(xmlNode.Attributes["maxLength"].Value);
-            }
+            uint maxLength = uint.Parse(GetAttributeValueOrDefault(xmlNode, "maxLength", "0"));
 
-            if (xmlNode.Attributes.GetNamedItem("hint") != null)
+            if (bool.Parse(GetAttributeValueOrDefault(xmlNode, "multiline", "false")))
             {
-                rb.AppendLine(string.Format("{0}ImGui.InputTextWithHint(\"{1}\", \"{2}\", ref {3}_Value, {4}));", prefix, name, xmlNode.Attributes["hint"].Value, codeName, maxLength));
+                uint width, height;
+                width = uint.Parse(GetAttributeValueOrDefault(xmlNode, "width", "0"));
+                height = uint.Parse(GetAttributeValueOrDefault(xmlNode, "height", "0"));
+
+                rb.AppendLine(string.Format("{0}ImGui.InputTextMultiline(\"{1}\", ref {2}_Value, {3}, new System.Numerics.Vector2({4}, {5})));", prefix, name, codeName, maxLength, width, height));
+            }
+            else if (TryGetAttributeValue(xmlNode, "hint", out var hint))
+            {
+                rb.AppendLine(string.Format("{0}ImGui.InputTextWithHint(\"{1}\", \"{2}\", ref {3}_Value, {4}));", prefix, name, hint, codeName, maxLength));
             }
             else
             {

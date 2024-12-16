@@ -31,6 +31,7 @@ namespace ImGuiSrcGenerator
 <RadioButton name=""##RadioGroup"" text=""Radio 4"" value=""3""/>
 <InputText name=""##InputText"" maxLength=""100"" />
 <InputText name=""##InputHint"" hint=""Hint Hint"" maxLength=""100"" />
+<InputText name=""##InputMulti"" maxLength=""100"" multiline=""true"" width=""200"" height=""200""/>
 </Container>
 ";
 

@@ -101,5 +101,25 @@ namespace ImGuiSrcGenerator.Generators
 
             return new string(arr);
         }
+
+        public static string GetAttributeValueOrDefault(XmlNode xmlNode, string key, string defaultValue)
+        {
+            if(xmlNode.Attributes.GetNamedItem(key) != null)
+            {
+                return xmlNode.Attributes[key].Value;
+            }
+            return defaultValue;
+        }
+
+        public static bool TryGetAttributeValue(XmlNode xmlNode, string key, out string value)
+        {
+            value = null;
+            if (xmlNode.Attributes.GetNamedItem(key) != null)
+            {
+                value = xmlNode.Attributes[key].Value;
+                return true;
+            }
+            return false;
+        }
     }
 }
