@@ -13,6 +13,9 @@ namespace ImGuiSrcGenerator.Tests.Generators
 <Container className=""TestContainer"" >
 </Container>
                 ";
+
+        string testFilePath = Path.Combine("TestFiles", "TestClass.igml");
+
         ImGuiSrcGenerator.Generators.Generator generator = new ImGuiSrcGenerator.Generators.Generator();
         [Fact]
         public void GenerateFromString()
@@ -37,6 +40,52 @@ namespace ImGuiSrcGenerator.Tests.Generators
 public partial class TestContainer
 {
 
+}
+", converted);
+        }
+
+        [Fact]
+        public void GenerateFromFile()
+        {
+            string converted = generator.ConvertFromFile(testFilePath);
+            Assert.NotEmpty(converted);
+        }
+
+        [Fact]
+        public void ConvertsAllComponents()
+        {
+            string converted = generator.ConvertFromFile(testFilePath);
+            Assert.Equal(
+@"public partial class TestContainer
+{
+	public void Render()
+	{
+		if (ImGui.Button(""Click Me!""))
+		{
+			MyFirstButton_OnClick();
+		}
+		ImGui.Checkbox(""Check Me!"", ref MyFirstCheckbox_Checked));
+		ImGui.RadioButton(""Radio 1"", ref RadioGroup_Value, 0));
+		ImGui.RadioButton(""Radio 2"", ref RadioGroup_Value, 1));
+		ImGui.RadioButton(""Radio 3"", ref RadioGroup_Value, 2));
+		ImGui.RadioButton(""Radio 4"", ref RadioGroup_Value, 3));
+		ImGui.InputText(""##InputText"", ref InputText_Value, 100));
+		ImGui.InputTextWithHint(""##InputHint"", ""Hint Hint"", ref InputHint_Value, 100));
+	}
+}
+
+
+public partial class TestContainer
+{
+	public bool MyFirstCheckbox_Checked;
+	public int RadioGroup_Value;
+	public string InputText_Value = """";
+	public string InputHint_Value = """";
+
+	public void MyFirstButton_OnClick()
+	{
+
+	}
 }
 ", converted);
         }
