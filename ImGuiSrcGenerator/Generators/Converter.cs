@@ -85,5 +85,21 @@ namespace ImGuiSrcGenerator.Generators
         public virtual void ConvertNodeForProperties(HashSet<string> properties, XmlNode xmlNode)
         {
         }
+
+        public static string GetName(XmlNode xmlNode)
+        {
+            return xmlNode.Attributes["name"].Value;
+        }
+
+        static char[] allowedNonAlphanumericCharacters = ['-', '_'];
+
+        public static string GetCodeUsableName(XmlNode xmlNode)
+        {
+            var name = GetName(xmlNode);
+
+            char[] arr = name.Where(c => (char.IsLetterOrDigit(c) || allowedNonAlphanumericCharacters.Contains(c))).ToArray();
+
+            return new string(arr);
+        }
     }
 }

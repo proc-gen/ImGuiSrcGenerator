@@ -17,15 +17,20 @@ namespace ImGuiSrcGenerator
         public static ImGuiRenderer GuiRenderer;
 
         Main Main = new Main();
+        TestClass TestClass = new TestClass();
+
+        bool display = false;
 
         string toConvert =
 @"<Container className=""TestContainer"" >
-<Button name=""MyFirstButton"" text=""Click Me!"" />
-<Checkbox name=""MyFirstCheckbox"" text=""Check Me!"" />
-<RadioButton name=""RadioGroup"" text=""Radio 1"" value=""0""/>
-<RadioButton name=""RadioGroup"" text=""Radio 2"" value=""1""/>
-<RadioButton name=""RadioGroup"" text=""Radio 3"" value=""2""/>
-<RadioButton name=""RadioGroup"" text=""Radio 4"" value=""3""/>
+<Button name=""##MyFirstButton"" text=""Click Me!"" />
+<Checkbox name=""##MyFirstCheckbox"" text=""Check Me!"" />
+<RadioButton name=""##RadioGroup"" text=""Radio 1"" value=""0""/>
+<RadioButton name=""##RadioGroup"" text=""Radio 2"" value=""1""/>
+<RadioButton name=""##RadioGroup"" text=""Radio 3"" value=""2""/>
+<RadioButton name=""##RadioGroup"" text=""Radio 4"" value=""3""/>
+<InputText name=""##InputText"" maxLength=""100"" />
+<InputText name=""##InputHint"" hint=""Hint Hint"" maxLength=""100"" />
 </Container>
 ";
 
@@ -58,7 +63,14 @@ namespace ImGuiSrcGenerator
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            {
+                display = false;
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.S))
+            {
+                display = true;
+            }
             base.Update(gameTime);
         }
 
@@ -73,8 +85,14 @@ namespace ImGuiSrcGenerator
 
             GuiRenderer.BeginLayout(gameTime);
 
-            Main.Render();
-
+            if (display)
+            {
+                TestClass.Render();
+            }
+            else
+            {
+                Main.Render();
+            }
             GuiRenderer.EndLayout();
         }
     }
