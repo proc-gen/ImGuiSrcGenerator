@@ -13,6 +13,7 @@ namespace ImGuiSrcGenerator.Display
             {
                 OnClick_Button();
             }
+            ImGui.SetItemTooltip("Stop waiting and click me");
             ImGui.Checkbox("Check me off", ref CheckboxChecked);
             ImGui.RadioButton("Radio 1", ref RadioValue, 0);
             ImGui.RadioButton("Radio 2", ref RadioValue, 1);
