@@ -16,17 +16,14 @@ namespace ImGuiSrcGenerator.Generators
             var codeName = GetCodeUsableName(xmlNode);
             rb.AppendLine(string.Format("{0}if (ImGui.Button(\"{1}\"))", prefix, xmlNode.Attributes["text"].Value));
             rb.AppendLine(string.Format("{0}{{", prefix));
-            rb.AppendLine(string.Format("{0}{1}_OnClick();", prefix + PrefixCharacter, codeName));
+            rb.AppendLine(string.Format("{0}{1}_OnClick.DynamicInvoke();", prefix + PrefixCharacter, codeName));
             rb.AppendLine(string.Format("{0}}}", prefix));
         }
 
-        public override void ConvertNodeForActionPreChildren(StringBuilder ab, XmlNode xmlNode, ref string prefix)
+        public override void ConvertNodeProperties(HashSet<string> properties, XmlNode xmlNode)
         {
             var codeName = GetCodeUsableName(xmlNode);
-            ab.AppendLine(string.Format("{0}public void {1}_OnClick()", prefix, codeName));
-            ab.AppendLine(string.Format("{0}{{", prefix));
-            ab.AppendLine();
-            ab.AppendLine(string.Format("{0}}}", prefix));
+            properties.Add(string.Format("public Delegate {0}_OnClick;", codeName));
         }
     }
 }

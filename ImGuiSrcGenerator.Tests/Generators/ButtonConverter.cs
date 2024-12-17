@@ -35,7 +35,7 @@ namespace ImGuiSrcGenerator.Tests.Generators
             Assert.Contains(
 @"		if (ImGui.Button(""Click Me!""))
 		{
-			Button1_OnClick();
+			Button1_OnClick.DynamicInvoke();
 		}
 ", converted);
         }
@@ -44,12 +44,7 @@ namespace ImGuiSrcGenerator.Tests.Generators
         public void HasOnClickFunctionForButton()
         {
             string converted = generator.ConvertFromString(toConvertOneButton);
-            Assert.Contains(
-@"	public void Button1_OnClick()
-	{
-
-	}
-", converted);
+            Assert.Contains("public Delegate Button1_OnClick;", converted);
         }
 
         [Fact]
@@ -59,13 +54,13 @@ namespace ImGuiSrcGenerator.Tests.Generators
             Assert.Contains(
 @"		if (ImGui.Button(""Click Me!""))
 		{
-			Button1_OnClick();
+			Button1_OnClick.DynamicInvoke();
 		}
 ", converted);
             Assert.Contains(
 @"		if (ImGui.Button(""Click Me!""))
 		{
-			Button2_OnClick();
+			Button2_OnClick.DynamicInvoke();
 		}
 ", converted);
         }
@@ -74,18 +69,8 @@ namespace ImGuiSrcGenerator.Tests.Generators
         public void HasOnClickFunctionForAllButtons()
         {
             string converted = generator.ConvertFromString(toConvertTwoButtons);
-            Assert.Contains(
-@"	public void Button1_OnClick()
-	{
-
-	}
-", converted);
-            Assert.Contains(
-@"	public void Button2_OnClick()
-	{
-
-	}
-", converted);
+            Assert.Contains("public Delegate Button1_OnClick;", converted);
+            Assert.Contains("public Delegate Button2_OnClick;", converted);
         }
     }
 }

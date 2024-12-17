@@ -11,7 +11,7 @@ namespace ImGuiSrcGenerator.Display
         {
             if (ImGui.Button("Click Me"))
             {
-                OnClick_Button();
+                ButtonOnClick.DynamicInvoke();
             }
             ImGui.SetItemTooltip("Stop waiting and click me");
             ImGui.Checkbox("Check me off", ref CheckboxChecked);
@@ -30,6 +30,7 @@ namespace ImGuiSrcGenerator.Display
 
     public partial class TestClass
     {
+        public Delegate ButtonOnClick;
         public bool CheckboxChecked;
         public int RadioValue;
         public string TextNormal = "";
@@ -38,6 +39,11 @@ namespace ImGuiSrcGenerator.Display
         public int TextInt;
         public float TextFloat;
         public double TextDouble;
+
+        public TestClass()
+        {
+            ButtonOnClick = OnClick_Button;
+        }
         public void OnClick_Button()
         {
             ImGui.Text("You clicked me!");
