@@ -1,62 +1,49 @@
-﻿using System;
+﻿using ImGuiSrcGenerator.Generators;
+using ImGuiSrcGenerator.Tests.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace ImGuiSrcGenerator.Tests.Generators
 {
     public class CheckboxConverter
     {
-        string toConvertOneCheckbox =
-                @"
-<Container className=""TestContainer"" >
-<Checkbox name=""Checkbox1"" text=""Check Me!"" />
-</Container>
-                ";
-        string toConvertTwoCheckboxes =
-                @"
-<Container className=""TestContainer"" >
-<Checkbox name=""Checkbox1"" text=""Check Me!"" />
-<Checkbox name=""Checkbox2"" text=""Check Me!"" />
-</Container>
-                ";
+        const string ElementName = "Checkbox";
+
         ImGuiSrcGenerator.Generators.Generator generator = new ImGuiSrcGenerator.Generators.Generator();
-        [Fact]
-        public void GenerateFromString()
+        XmlDocument xmlDoc = new XmlDocument();
+        Dictionary<string, string> attributes = new Dictionary<string, string>()
         {
-            string converted = generator.ConvertFromString(toConvertOneCheckbox);
-            Assert.NotEmpty(converted);
+            {"name", "Checkbox1"},
+            {"text", "Check Me!" }
+        };
+
+        [Fact]
+        public void GeneratesRenderCodeForCheckbox()
+        {
+            var checkboxElement = xmlDoc.CreateElementWithAttributes(ElementName, attributes);
+
+            StringBuilder sb = new StringBuilder();
+            string prefix = "";
+            var checkboxConverter = new ImGuiSrcGenerator.Generators.CheckboxConverter(generator);
+            checkboxConverter.ConvertNodeForRenderPreChildren(sb, checkboxElement, ref prefix);
+
+            Assert.Contains("ImGui.Checkbox(\"Check Me!\", ref Checkbox1_Checked));", sb.ToString());
         }
 
         [Fact]
-        public void HasRenderCodeForCheckbox()
+        public void GeneratesPropertyCodeForCheckbox()
         {
-            string converted = generator.ConvertFromString(toConvertOneCheckbox);
-            Assert.Contains("ImGui.Checkbox(\"Check Me!\", ref Checkbox1_Checked));", converted);
-        }
+            var checkboxElement = xmlDoc.CreateElementWithAttributes(ElementName, attributes);
 
-        [Fact]
-        public void HasBooleanPropertyForCheckboxValue()
-        {
-            string converted = generator.ConvertFromString(toConvertOneCheckbox);
-            Assert.Contains("public bool Checkbox1_Checked;", converted);
-        }
+            HashSet<string> properties = new HashSet<string>();
+            var checkboxConverter = new ImGuiSrcGenerator.Generators.CheckboxConverter(generator);
+            checkboxConverter.ConvertNodeForProperties(properties, checkboxElement);
 
-        [Fact]
-        public void HasRenderCodeForAllCheckboxes()
-        {
-            string converted = generator.ConvertFromString(toConvertTwoCheckboxes);
-            Assert.Contains("ImGui.Checkbox(\"Check Me!\", ref Checkbox1_Checked));", converted);
-            Assert.Contains("ImGui.Checkbox(\"Check Me!\", ref Checkbox2_Checked));", converted);
-        }
-
-        [Fact]
-        public void HasBooleanPropertiesForAllCheckboxValues()
-        {
-            string converted = generator.ConvertFromString(toConvertTwoCheckboxes);
-            Assert.Contains("public bool Checkbox1_Checked;", converted);
-            Assert.Contains("public bool Checkbox2_Checked;", converted);
+            Assert.Contains("public bool Checkbox1_Checked;", properties);
         }
     }
 }

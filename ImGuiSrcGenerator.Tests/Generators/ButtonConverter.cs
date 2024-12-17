@@ -1,76 +1,54 @@
-﻿using System;
+﻿using ImGuiSrcGenerator.Generators;
+using ImGuiSrcGenerator.Tests.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace ImGuiSrcGenerator.Tests.Generators
 {
     public class ButtonConverter
     {
-        string toConvertOneButton =
-@"<Container className=""TestContainer"" >
-<Button name=""Button1"" text=""Click Me!"" />
-</Container>
-";
-        string toConvertTwoButtons =
-@"<Container className=""TestContainer"" >
-<Button name=""Button1"" text=""Click Me!"" />
-<Button name=""Button2"" text=""Click Me!"" />
-</Container>
-";
+        const string ElementName = "Button";
 
         ImGuiSrcGenerator.Generators.Generator generator = new ImGuiSrcGenerator.Generators.Generator();
-        [Fact]
-        public void GenerateFromString()
+        XmlDocument xmlDoc = new XmlDocument();
+        Dictionary<string, string> attributes = new Dictionary<string, string>()
         {
-            string converted = generator.ConvertFromString(toConvertOneButton);
-            Assert.NotEmpty(converted);
-        }
+            {"name", "Button1"},
+            {"text", "Click Me!" }
+        };
 
         [Fact]
-        public void HasRenderCodeForButton()
+        public void GeneratesRenderCodeForButton()
         {
-            string converted = generator.ConvertFromString(toConvertOneButton);
+            var buttonElement = xmlDoc.CreateElementWithAttributes(ElementName, attributes);
+
+            StringBuilder sb = new StringBuilder();
+            string prefix = "";
+            var buttonConverter = new ImGuiSrcGenerator.Generators.ButtonConverter(generator);
+            buttonConverter.ConvertNodeForRenderPreChildren(sb, buttonElement, ref prefix);
+            
             Assert.Contains(
-@"		if (ImGui.Button(""Click Me!""))
-		{
-			Button1_OnClick.DynamicInvoke();
-		}
-", converted);
+@"if (ImGui.Button(""Click Me!""))
+{
+	Button1_OnClick.DynamicInvoke();
+}
+", sb.ToString());
         }
 
         [Fact]
-        public void HasOnClickFunctionForButton()
+        public void GeneratesPropertyCodeForButton()
         {
-            string converted = generator.ConvertFromString(toConvertOneButton);
-            Assert.Contains("public Delegate Button1_OnClick;", converted);
-        }
+            var buttonElement = xmlDoc.CreateElementWithAttributes(ElementName, attributes);
 
-        [Fact]
-        public void HasRenderCodeForAllButtons()
-        {
-            string converted = generator.ConvertFromString(toConvertTwoButtons);
-            Assert.Contains(
-@"		if (ImGui.Button(""Click Me!""))
-		{
-			Button1_OnClick.DynamicInvoke();
-		}
-", converted);
-            Assert.Contains(
-@"		if (ImGui.Button(""Click Me!""))
-		{
-			Button2_OnClick.DynamicInvoke();
-		}
-", converted);
-        }
+            HashSet<string> properties = new HashSet<string>();
+            var buttonConverter = new ImGuiSrcGenerator.Generators.ButtonConverter(generator);
+            buttonConverter.ConvertNodeForProperties(properties, buttonElement);
 
-        [Fact]
-        public void HasOnClickFunctionForAllButtons()
-        {
-            string converted = generator.ConvertFromString(toConvertTwoButtons);
-            Assert.Contains("public Delegate Button1_OnClick;", converted);
-            Assert.Contains("public Delegate Button2_OnClick;", converted);
+            Assert.Contains("public Delegate Button1_OnClick;", properties);
         }
     }
 }

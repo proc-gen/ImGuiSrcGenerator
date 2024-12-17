@@ -62,7 +62,7 @@ public partial class TestContainer
 	{
 		if (ImGui.Button(""Click Me!""))
 		{
-			MyFirstButton_OnClick();
+			MyFirstButton_OnClick.DynamicInvoke();
 		}
 		ImGui.Checkbox(""Check Me!"", ref MyFirstCheckbox_Checked));
 		ImGui.RadioButton(""Radio 1"", ref RadioGroup_Value, 0));
@@ -71,21 +71,20 @@ public partial class TestContainer
 		ImGui.RadioButton(""Radio 4"", ref RadioGroup_Value, 3));
 		ImGui.InputText(""##InputText"", ref InputText_Value, 100));
 		ImGui.InputTextWithHint(""##InputHint"", ""Hint Hint"", ref InputHint_Value, 100));
+		ImGui.InputTextMultiline(""##InputMulti"", ref InputMulti_Value, 100, new System.Numerics.Vector2(200, 200)));
 	}
 }
 
 
 public partial class TestContainer
 {
+	public Delegate MyFirstButton_OnClick;
 	public bool MyFirstCheckbox_Checked;
 	public int RadioGroup_Value;
 	public string InputText_Value = """";
 	public string InputHint_Value = """";
+	public string InputMulti_Value = """";
 
-	public void MyFirstButton_OnClick()
-	{
-
-	}
 }
 ", converted);
         }

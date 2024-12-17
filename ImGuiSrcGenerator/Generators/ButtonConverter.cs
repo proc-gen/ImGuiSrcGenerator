@@ -20,7 +20,7 @@ namespace ImGuiSrcGenerator.Generators
             rb.AppendLine(string.Format("{0}}}", prefix));
         }
 
-        public override void ConvertNodeProperties(HashSet<string> properties, XmlNode xmlNode)
+        public override void ConvertNodeForProperties(HashSet<string> properties, XmlNode xmlNode)
         {
             var codeName = GetCodeUsableName(xmlNode);
             properties.Add(string.Format("public Delegate {0}_OnClick;", codeName));
