@@ -12,7 +12,7 @@ namespace ImGuiSrcGenerator.Generators
     public abstract class Converter
     {
         protected Generator Generator;
-        protected string PrefixCharacter { get { return Generator.PrefixCharacter; } }
+        protected string PrefixCharacter { get { return Generator.Prefix; } }
 
         protected Converter(Generator generator) 
         {

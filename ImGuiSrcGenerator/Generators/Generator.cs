@@ -12,7 +12,7 @@ namespace ImGuiSrcGenerator.Generators
 {
     public class Generator
     {
-        public string PrefixCharacter { get; private set; } = "\t";
+        public string Prefix { get; private set; } = "\t";
         Dictionary<string, Converter> Converters = new Dictionary<string, Converter>();
 
         public string ConvertFromString(string input)
@@ -52,9 +52,9 @@ namespace ImGuiSrcGenerator.Generators
 
         private void SetConfiguration(XmlNode xmlNode)
         {
-            if (xmlNode.Attributes.GetNamedItem("prefixCharacter") != null)
+            if (xmlNode.Attributes.GetNamedItem("prefix") != null)
             {
-                PrefixCharacter = xmlNode.Attributes["prefixCharacter"].Value;
+                Prefix = xmlNode.Attributes["prefix"].Value;
             }
         }
 

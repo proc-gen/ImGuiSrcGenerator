@@ -10,7 +10,13 @@ namespace ImGuiSrcGenerator.Tests.Generators
     {
         string toConvertContainerOnly =
                 @"
-<Container className=""TestContainer"" >
+<Container className=""TestContainer"">
+</Container>
+                ";
+
+        string toConvertContainerWithPrefix =
+                @"
+<Container className=""TestContainer"" prefix=""  "">
 </Container>
                 ";
 
@@ -22,6 +28,21 @@ namespace ImGuiSrcGenerator.Tests.Generators
         {
             string converted = generator.ConvertFromString(toConvertContainerOnly);
             Assert.NotEmpty(converted);
+        }
+
+        [Fact]
+        public void SetsPrefixCorrectly()
+        {
+            string converted = generator.ConvertFromString(toConvertContainerWithPrefix);
+            Assert.Equal("  ", generator.Prefix);
+        }
+
+        [Fact]
+        public void GetsConverterByComponentName()
+        {
+            var converter = generator.GetConverterByComponentName("Container");
+            Assert.NotNull(converter);
+            Assert.Equal(typeof(ImGuiSrcGenerator.Generators.ContainerConverter), converter.GetType());
         }
 
         [Fact]
