@@ -16,7 +16,7 @@ namespace ImGuiSrcGenerator.Generators
             var codeName = GetCodeUsableName(xmlNode);
             rb.AppendLine(string.Format("{0}if (ImGui.Button(\"{1}\"))", prefix, xmlNode.Attributes["text"].Value));
             rb.AppendLine(string.Format("{0}{{", prefix));
-            rb.AppendLine(string.Format("{0}{1}_OnClick.DynamicInvoke();", prefix + PrefixCharacter, codeName));
+            rb.AppendLine(string.Format("{0}{1}_OnClick.DynamicInvoke();", prefix + Prefix, codeName));
             rb.AppendLine(string.Format("{0}}}", prefix));
         }
 

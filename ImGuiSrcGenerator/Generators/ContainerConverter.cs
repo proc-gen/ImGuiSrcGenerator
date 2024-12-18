@@ -46,7 +46,7 @@ namespace ImGuiSrcGenerator.Generators
         {
             rb.AppendLine(string.Format("public partial class {0}", xmlNode.Attributes["className"].Value));
             rb.AppendLine("{");
-            prefix += PrefixCharacter;
+            prefix += Prefix;
             rb.AppendLine(string.Format("{0}public void Render()", prefix));
             rb.AppendLine(string.Format("{0}{{", prefix));
         }
@@ -60,7 +60,7 @@ namespace ImGuiSrcGenerator.Generators
         {
             ab.AppendLine(string.Format("public partial class {0}", xmlNode.Attributes["className"].Value));
             ab.AppendLine("{");
-            prefix += PrefixCharacter;
+            prefix += Prefix;
         }
         public override void ConvertNodeForActionPostChildren(StringBuilder ab, XmlNode xmlNode, ref string prefix)
         {

@@ -12,7 +12,7 @@ namespace ImGuiSrcGenerator.Generators
     public abstract class Converter
     {
         protected Generator Generator;
-        protected string PrefixCharacter { get { return Generator.Prefix; } }
+        protected string Prefix { get { return Generator.Prefix; } }
 
         protected Converter(Generator generator) 
         {
@@ -38,7 +38,7 @@ namespace ImGuiSrcGenerator.Generators
                 foreach (XmlNode childNode in xmlNode.ChildNodes)
                 {
                     var childConverter = Generator.GetConverterByComponentName(childNode.Name);
-                    string newPrefix = mode != ConvertMode.Property ? prefix + PrefixCharacter : prefix;
+                    string newPrefix = mode != ConvertMode.Property ? prefix + Prefix : prefix;
                     childConverter.ConvertNode(mode, sb, childNode, ref newPrefix);
                 }
             }
