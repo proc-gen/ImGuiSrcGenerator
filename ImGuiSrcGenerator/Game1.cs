@@ -24,6 +24,7 @@ namespace ImGuiSrcGenerator
         string toConvert =
 @"<Container className=""TestContainer"" >
 <Button name=""##MyFirstButton"" text=""Click Me!"" />
+<Tooltip name=""##Tooltip1"" text=""Stop waiting and click me"" />
 <Checkbox name=""##MyFirstCheckbox"" text=""Check Me!"" />
 <RadioButton name=""##RadioGroup"" text=""Radio 1"" value=""0""/>
 <RadioButton name=""##RadioGroup"" text=""Radio 2"" value=""1""/>
