@@ -25,6 +25,8 @@ namespace ImGuiSrcGenerator.Display
             ImGui.InputInt("##InputInt", ref TextInt, 1);
             ImGui.InputFloat("##InputFloat", ref TextFloat, .1f, .5f);
             ImGui.InputDouble("##InputDouble", ref TextDouble, .1, .5);
+            ImGui.ArrowButton("##CountButton", ImGuiDir.None);
+            ImGui.ArrowButton("##LeftButton", ImGuiDir.Left);
         }
     }
 
