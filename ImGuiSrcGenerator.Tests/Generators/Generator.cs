@@ -85,14 +85,14 @@ public partial class TestContainer
 		{
 			MyFirstButton_OnClick.DynamicInvoke();
 		}
-		ImGui.Checkbox(""Check Me!"", ref MyFirstCheckbox_Checked));
-		ImGui.RadioButton(""Radio 1"", ref RadioGroup_Value, 0));
-		ImGui.RadioButton(""Radio 2"", ref RadioGroup_Value, 1));
-		ImGui.RadioButton(""Radio 3"", ref RadioGroup_Value, 2));
-		ImGui.RadioButton(""Radio 4"", ref RadioGroup_Value, 3));
-		ImGui.InputText(""##InputText"", ref InputText_Value, 100));
-		ImGui.InputTextWithHint(""##InputHint"", ""Hint Hint"", ref InputHint_Value, 100));
-		ImGui.InputTextMultiline(""##InputMulti"", ref InputMulti_Value, 100, new System.Numerics.Vector2(200, 200)));
+		ImGui.Checkbox(""Check Me!"", ref MyFirstCheckbox_Checked);
+		ImGui.RadioButton(""Radio 1"", ref RadioGroup_Value, 0);
+		ImGui.RadioButton(""Radio 2"", ref RadioGroup_Value, 1);
+		ImGui.RadioButton(""Radio 3"", ref RadioGroup_Value, 2);
+		ImGui.RadioButton(""Radio 4"", ref RadioGroup_Value, 3);
+		ImGui.InputText(""##InputText"", ref InputText_Value, 100);
+		ImGui.InputTextWithHint(""##InputHint"", ""Hint Hint"", ref InputHint_Value, 100);
+		ImGui.InputTextMultiline(""##InputMulti"", ref InputMulti_Value, 100, new System.Numerics.Vector2(200, 200));
 	}
 }
 

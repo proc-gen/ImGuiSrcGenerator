@@ -78,7 +78,7 @@ namespace ImGuiSrcGenerator.Tests.Generators
 {
 	public void Render()
 	{
-		ImGui.Checkbox(""Check Me!"", ref Checkbox1_Checked));
+		ImGui.Checkbox(""Check Me!"", ref Checkbox1_Checked);
 	}
 }", sb.ToString());
         }

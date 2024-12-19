@@ -14,7 +14,7 @@ namespace ImGuiSrcGenerator.Generators
         public override void ConvertNodeForRenderPreChildren(StringBuilder rb, XmlNode xmlNode, ref string prefix)
         {
             var codeName = GetCodeUsableName(xmlNode);
-            rb.AppendLine(string.Format("{0}ImGui.RadioButton(\"{1}\", ref {2}_Value, {3}));", prefix, xmlNode.Attributes["text"].Value, codeName, xmlNode.Attributes["value"].Value));
+            rb.AppendLine(string.Format("{0}ImGui.RadioButton(\"{1}\", ref {2}_Value, {3});", prefix, xmlNode.Attributes["text"].Value, codeName, xmlNode.Attributes["value"].Value));
         }
 
         public override void ConvertNodeForProperties(HashSet<string> properties, XmlNode xmlNode)

@@ -31,7 +31,7 @@ namespace ImGuiSrcGenerator.Tests.Generators
             var checkboxConverter = new ImGuiSrcGenerator.Generators.CheckboxConverter(generator);
             checkboxConverter.ConvertNodeForRenderPreChildren(sb, checkboxElement, ref prefix);
 
-            Assert.Contains("ImGui.Checkbox(\"Check Me!\", ref Checkbox1_Checked));", sb.ToString());
+            Assert.Contains("ImGui.Checkbox(\"Check Me!\", ref Checkbox1_Checked);", sb.ToString());
         }
 
         [Fact]

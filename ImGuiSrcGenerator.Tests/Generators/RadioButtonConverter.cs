@@ -31,7 +31,7 @@ namespace ImGuiSrcGenerator.Tests.Generators
             var radioButtonConverter = new ImGuiSrcGenerator.Generators.RadioButtonConverter(generator);
             radioButtonConverter.ConvertNodeForRenderPreChildren(sb, radioButtonElement, ref prefix);
 
-            Assert.Contains("ImGui.RadioButton(\"Radio 1\", ref RadioGroup1_Value, 1));", sb.ToString());
+            Assert.Contains("ImGui.RadioButton(\"Radio 1\", ref RadioGroup1_Value, 1);", sb.ToString());
         }
 
         [Fact]

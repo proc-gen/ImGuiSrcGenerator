@@ -13,7 +13,7 @@ namespace ImGuiSrcGenerator.Generators
         public override void ConvertNodeForRenderPreChildren(StringBuilder rb, XmlNode xmlNode, ref string prefix)
         {
             var codeName = GetCodeUsableName(xmlNode);
-            rb.AppendLine(string.Format("{0}ImGui.Checkbox(\"{1}\", ref {2}_Checked));", prefix, xmlNode.Attributes["text"].Value, codeName));
+            rb.AppendLine(string.Format("{0}ImGui.Checkbox(\"{1}\", ref {2}_Checked);", prefix, xmlNode.Attributes["text"].Value, codeName));
         }
 
         public override void ConvertNodeForProperties(HashSet<string> properties, XmlNode xmlNode)

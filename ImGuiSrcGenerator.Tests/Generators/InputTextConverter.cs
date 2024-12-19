@@ -47,7 +47,7 @@ namespace ImGuiSrcGenerator.Tests.Generators
             var inputTextConverter = new ImGuiSrcGenerator.Generators.InputTextConverter(generator);
             inputTextConverter.ConvertNodeForRenderPreChildren(sb, textElement, ref prefix);
 
-            Assert.Contains("ImGui.InputText(\"##InputText\", ref InputText_Value, 100));", sb.ToString());
+            Assert.Contains("ImGui.InputText(\"##InputText\", ref InputText_Value, 100);", sb.ToString());
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace ImGuiSrcGenerator.Tests.Generators
             var inputTextConverter = new ImGuiSrcGenerator.Generators.InputTextConverter(generator);
             inputTextConverter.ConvertNodeForRenderPreChildren(sb, hintElement, ref prefix);
 
-            Assert.Contains("ImGui.InputTextWithHint(\"##InputHint\", \"My Hint\", ref InputHint_Value, 100));", sb.ToString());
+            Assert.Contains("ImGui.InputTextWithHint(\"##InputHint\", \"My Hint\", ref InputHint_Value, 100);", sb.ToString());
         }
 
         [Fact]
@@ -73,7 +73,7 @@ namespace ImGuiSrcGenerator.Tests.Generators
             var inputTextConverter = new ImGuiSrcGenerator.Generators.InputTextConverter(generator);
             inputTextConverter.ConvertNodeForRenderPreChildren(sb, multilineTextElement, ref prefix);
 
-            Assert.Contains("ImGui.InputTextMultiline(\"##InputMulti\", ref InputMulti_Value, 100, new System.Numerics.Vector2(200, 200)));", sb.ToString());
+            Assert.Contains("ImGui.InputTextMultiline(\"##InputMulti\", ref InputMulti_Value, 100, new System.Numerics.Vector2(200, 200));", sb.ToString());
         }
 
         [Fact]
