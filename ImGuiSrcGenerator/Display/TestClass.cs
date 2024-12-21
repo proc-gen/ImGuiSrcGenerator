@@ -9,10 +9,13 @@ namespace ImGuiSrcGenerator.Display
     {
         public void Render()
         {
+            ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(1, 1, 0, 1));
+            ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(1, 0, 1, 1));
             if (ImGui.Button("Click Me"))
             {
                 ButtonOnClick.DynamicInvoke();
             }
+            ImGui.PopStyleColor();
             ImGui.SetItemTooltip("Stop waiting and click me");
             ImGui.Checkbox("Check me off", ref CheckboxChecked);
             ImGui.RadioButton("Radio 1", ref RadioValue, 0);
@@ -25,8 +28,11 @@ namespace ImGuiSrcGenerator.Display
             ImGui.InputInt("##InputInt", ref TextInt, 1);
             ImGui.InputFloat("##InputFloat", ref TextFloat, .1f, .5f);
             ImGui.InputDouble("##InputDouble", ref TextDouble, .1, .5);
+            ImGui.InputInt3("##InputInt3", ref TextInt3[0]);
+            ImGui.InputFloat3("##InputFloat3", ref TextFloat3);
             ImGui.ArrowButton("##CountButton", ImGuiDir.None);
             ImGui.ArrowButton("##LeftButton", ImGuiDir.Left);
+            ImGui.PopStyleColor();
         }
     }
 
@@ -39,7 +45,9 @@ namespace ImGuiSrcGenerator.Display
         public string TextHint = "";
         public string TextMulti = "";
         public int TextInt;
+        public int[] TextInt3 = [0, 0, 0];
         public float TextFloat;
+        public Vector3 TextFloat3 = new Vector3();
         public double TextDouble;
 
         public TestClass()
