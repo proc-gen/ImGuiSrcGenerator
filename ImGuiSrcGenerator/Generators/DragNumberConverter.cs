@@ -8,9 +8,9 @@ using System.Xml;
 
 namespace ImGuiSrcGenerator.Generators
 {
-    public class InputNumberConverter : Converter
+    public class DragNumberConverter : Converter
     {
-        public InputNumberConverter(Generator generator) : base(generator) { }
+        public DragNumberConverter(Generator generator) : base(generator) { }
 
         public override void ConvertNodeForRenderPreChildren(StringBuilder rb, XmlNode xmlNode, ref string prefix)
         {
@@ -18,35 +18,24 @@ namespace ImGuiSrcGenerator.Generators
             var codeName = GetCodeUsableName(xmlNode);
             var dataType = GetAttributeValueOrDefault(xmlNode, "type", "");
             var componentName = ComponentNameFromType(dataType);
-            var step = GetAttributeValueOrDefault(xmlNode, "step", "0");
-            var stepFast = GetAttributeValueOrDefault(xmlNode, "stepFast", "0");
+            var speed = GetAttributeValueOrDefault(xmlNode, "speed", "0");
+            var min = GetAttributeValueOrDefault(xmlNode, "min", "0");
+            var max = GetAttributeValueOrDefault(xmlNode, "max", "0");
+            var format = GetAttributeValueOrDefault(xmlNode, "format", "%d");
 
-            if(dataType.Length == 1)
+            if (dataType[0] == 'f')
             {
-                if (dataType == "i")
-                {
-                    rb.AppendLine(string.Format("{0}ImGui.{1}(\"{2}\", ref {3}_Value, {4});", prefix, componentName, name, codeName, step));
-                }
-                else
-                {
-                    if(dataType == "f")
-                    {
-                        step += dataType;
-                        stepFast += dataType;
-                    }
+                speed += 'f';
+                min += 'f';
+                max += "f";
+            }
 
-                    rb.AppendLine(string.Format("{0}ImGui.{1}(\"{2}\", ref {3}_Value, {4}, {5});", prefix, componentName, name, codeName, step, stepFast));
-                }
-            }
-            else
-            {
-                rb.AppendLine(string.Format("{0}ImGui.{1}(\"{2}\", ref {3}_Value{4});", prefix, componentName, name, codeName, dataType[0] == 'i' ? "[0]" : ""));
-            }
+            rb.AppendLine(string.Format("{0}ImGui.{1}(\"{2}\", ref {3}_Value{4}, {5}, {6}, {7}, \"{8}\");", prefix, componentName, name, codeName, dataType.Length > 1 ? "[0]" : "", speed, min, max, format));
         }
 
         private string ComponentNameFromType(string dataType)
         {
-            return string.Concat("Input", ConverterUtils.ComponentNameTypeFromDataType(dataType));
+            return string.Concat("Drag", ConverterUtils.ComponentNameTypeFromDataType(dataType));
         }
 
         public override void ConvertNodeForProperties(HashSet<string> properties, XmlNode xmlNode)

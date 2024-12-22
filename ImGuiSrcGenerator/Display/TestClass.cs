@@ -19,8 +19,11 @@ namespace ImGuiSrcGenerator.Display
             ImGui.SetItemTooltip("Stop waiting and click me");
             ImGui.Checkbox("Check me off", ref CheckboxChecked);
             ImGui.RadioButton("Radio 1", ref RadioValue, 0);
+            ImGui.SameLine();
             ImGui.RadioButton("Radio 2", ref RadioValue, 1);
+            ImGui.SameLine(); 
             ImGui.RadioButton("Radio 3", ref RadioValue, 2);
+            ImGui.SameLine(); 
             ImGui.RadioButton("Radio 4", ref RadioValue, 3);
             ImGui.InputText("##InputText", ref TextNormal, 100);
             ImGui.InputTextWithHint("##InputHint", "Hint Hint", ref TextHint, 100);
@@ -30,8 +33,14 @@ namespace ImGuiSrcGenerator.Display
             ImGui.InputDouble("##InputDouble", ref TextDouble, .1, .5);
             ImGui.InputInt3("##InputInt3", ref TextInt3[0]);
             ImGui.InputFloat3("##InputFloat3", ref TextFloat3);
-            ImGui.ArrowButton("##CountButton", ImGuiDir.None);
             ImGui.ArrowButton("##LeftButton", ImGuiDir.Left);
+            ImGui.SameLine(); 
+            ImGui.ArrowButton("##RightButton", ImGuiDir.Right);
+            ImGui.DragInt("##DragInt", ref DragInt, 1, 0, 100, "%d");
+            ImGui.DragInt2("##DragInt2", ref DragInt2[0], 1, 0, 100, "%d%%");
+            ImGui.DragFloat("##DragFloat", ref DragFloat, .1f, -1, 1);
+            ImGui.DragFloat2("##DragFloat2", ref DragFloat2, .1f, -10, 10);
+            
             ImGui.PopStyleColor();
         }
     }
@@ -49,6 +58,10 @@ namespace ImGuiSrcGenerator.Display
         public float TextFloat;
         public Vector3 TextFloat3 = new Vector3();
         public double TextDouble;
+        public int DragInt;
+        public float DragFloat;
+        public int[] DragInt2 = [0, 0];
+        public Vector2 DragFloat2 = new Vector2();
 
         public TestClass()
         {
