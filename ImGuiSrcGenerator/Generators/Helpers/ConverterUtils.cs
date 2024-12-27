@@ -30,6 +30,8 @@ namespace ImGuiSrcGenerator.Generators.Helpers
                     return "Float4";
                 case "d":
                     return "Double";
+                case "a":
+                    return "Angle";
                 default:
                     return "";
             }
@@ -48,6 +50,7 @@ namespace ImGuiSrcGenerator.Generators.Helpers
                 case "i4":
                     return "int[]";
                 case "f":
+                case "a":
                     return "float";
                 case "f2":
                     return "System.Numerics.Vector2";
@@ -75,6 +78,7 @@ namespace ImGuiSrcGenerator.Generators.Helpers
                 case "i4":
                     return "[0, 0, 0, 0]";
                 case "f":
+                case "a":
                     return "0f";
                 case "f2":
                     return "new System.Numerics.Vector2()";

@@ -40,6 +40,8 @@ namespace ImGuiSrcGenerator.Display
             ImGui.DragInt2("##DragInt2", ref DragInt2[0], 1, 0, 100, "%d%%");
             ImGui.DragFloat("##DragFloat", ref DragFloat, .1f, -1, 1);
             ImGui.DragFloat2("##DragFloat2", ref DragFloat2, .1f, -10, 10);
+            ImGui.SliderInt("##SliderInt", ref SliderInt, -10, 10);
+            ImGui.SliderAngle("##SliderAngle", ref SliderAngle, 0f, 180f);
             
             ImGui.PopStyleColor();
         }
@@ -62,6 +64,8 @@ namespace ImGuiSrcGenerator.Display
         public float DragFloat;
         public int[] DragInt2 = [0, 0];
         public Vector2 DragFloat2 = new Vector2();
+        public int SliderInt;
+        public float SliderAngle;
 
         public TestClass()
         {
